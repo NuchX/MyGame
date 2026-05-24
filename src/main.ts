@@ -1,6 +1,7 @@
 import "./style.css"
 
-import { startGame } from "./game"
+import { showCountdown } from "./game"
+
 
 const app =
   document.querySelector<HTMLDivElement>(
@@ -30,9 +31,10 @@ const startButton =
     "#start-btn"
   )!
 
+
 startButton.addEventListener(
   "click",
   () => {
-    startGame()
+    showCountdown()
   }
 )

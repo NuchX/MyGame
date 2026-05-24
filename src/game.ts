@@ -37,9 +37,31 @@ const app =
 
 let level = 1
 
+
 export function startGame() {
-  const colors =
-    baseColors.slice(0, level + 2)
+    
+  let colorCount = 3
+
+    if(level >= 4){
+
+      colorCount = 4
+    }
+
+    if(level >= 7){
+
+      colorCount = 5
+    }
+
+    if(level >= 10){
+
+      colorCount = 6
+    }
+
+    const colors =
+      baseColors.slice(
+        0,
+        colorCount
+      )
 
   app.innerHTML = `
     <div class="game-screen">
@@ -63,24 +85,40 @@ export function startGame() {
 
   let index = 0
 
-  const durations = colors.map(() => {
+      let normalTime = 950
+      let shortTime = 500
 
-    const min =
-      Math.max(250, 700 - level * 40)
+      if(level >= 4){
 
-    const max =
-      Math.max(600, 1800 - level * 60)
+        normalTime = 850
+        shortTime = 420
+      }
 
-    return (
-      min +
-      Math.random() * (max - min)
-    )
-  })
+      if(level >= 7){
+
+        normalTime = 720
+        shortTime = 350
+      }
+
+      if(level >= 10){
+
+        normalTime = 600
+        shortTime = 280
+      }
+
+      const durations =
+        colors.map(
+          () => normalTime
+        )
 
   const shortestIndex =
-    durations.indexOf(
-      Math.min(...durations)
-    )
+  Math.floor(
+    Math.random() *
+    durations.length
+  )
+  
+    durations[shortestIndex] =
+      shortTime
 
   function nextColor() {
 
@@ -95,6 +133,7 @@ export function startGame() {
     }
 
     const current = colors[index]
+    colorBox.style.opacity = "1"
 
     colorBox.style.background =
       current.value
@@ -104,22 +143,19 @@ export function startGame() {
 
     setTimeout(() => {
 
-      colorBox.style.background =
-        "#111827"
-
-      colorBox.style.boxShadow =
-        "none"
-
       setTimeout(() => {
+        colorBox.style.opacity = "0"
         index++
         nextColor()
-      }, 250)
+      }, 600)
 
     }, durations[index])
   }
 
   nextColor()
 }
+
+
 
 function showAnswers(
   colors: any[],
@@ -210,9 +246,140 @@ function showLevelClear() {
   nextButton.addEventListener(
     "click",
     () => {
-      startGame()
+      showLevelCountdown()
     }
   )
+}
+
+
+export function showCountdown() {
+
+  app.innerHTML = `
+    <div class="countdown-screen">
+
+      <h1 id="count-text">
+        ARE YOU READY?
+      </h1>
+
+    </div>
+  `
+
+  const countText =
+    document.querySelector(
+      "#count-text"
+    ) as HTMLHeadingElement
+
+  function updateText(
+    text: string
+  ) {
+
+    countText.style.opacity = "0"
+
+    countText.style.transform =
+      "scale(0.7)"
+
+    setTimeout(() => {
+
+      countText.textContent = text
+
+      countText.style.opacity = "1"
+
+      countText.style.transform =
+        "scale(1)"
+
+    }, 250)
+  }
+
+  setTimeout(() => {
+
+    updateText("3")
+
+  }, 2500)
+
+  setTimeout(() => {
+
+    updateText("2")
+
+  }, 3500)
+
+  setTimeout(() => {
+
+    updateText("1")
+
+  }, 4500)
+
+  setTimeout(() => {
+
+    updateText("LET'S GO!")
+
+  }, 5500)
+
+  setTimeout(() => {
+
+    startGame()
+
+  }, 6800)
+}
+
+export function showLevelCountdown() {
+
+  app.innerHTML = `
+    <div class="countdown-screen">
+
+      <h1 id="count-text"></h1>
+
+    </div>
+  `
+
+  const countText =
+    document.querySelector(
+      "#count-text"
+    ) as HTMLHeadingElement
+
+  function updateText(
+    text: string
+  ) {
+
+    countText.style.opacity = "0"
+
+    countText.style.transform =
+      "scale(0.7)"
+
+    setTimeout(() => {
+
+      countText.textContent = text
+
+      countText.style.opacity = "1"
+
+      countText.style.transform =
+        "scale(1)"
+
+    }, 250)
+  }
+
+  setTimeout(() => {
+
+    updateText("3")
+
+  }, 500)
+
+  setTimeout(() => {
+
+    updateText("2")
+
+  }, 1500)
+
+  setTimeout(() => {
+
+    updateText("1")
+
+  }, 2500)
+
+  setTimeout(() => {
+
+    startGame()
+
+  }, 3800)
 }
 
 function showGameOver(
@@ -262,7 +429,7 @@ function showGameOver(
 
       level = 1
 
-      startGame()
+      showCountdown()
     }
   )
 
@@ -310,7 +477,7 @@ function showMainMenu() {
   startButton.addEventListener(
     "click",
     () => {
-      startGame()
+      showCountdown()
     }
   )
 }

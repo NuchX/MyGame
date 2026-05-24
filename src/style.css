@@ -178,12 +178,17 @@ button:hover {
 
   border-radius: 50px;
 
-  background: #111827;
+  background: transparent;
 
-  transition: 0.2s;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
 
   border:
     2px solid rgba(255,255,255,0.1);
+
+
 }
 
 /* RESULT */
@@ -267,4 +272,43 @@ button:hover {
       #3b82f6,
       #06b6d4
     );
+}
+
+.countdown-screen {
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#count-text {
+  font-size: 120px;
+
+  font-weight: 900;
+
+  color: #2563eb;
+
+  text-shadow:
+    0 0 40px rgba(37,99,235,0.35);
+
+  animation:
+    pop 0.8s ease;
+
+  transition:
+    0.4s ease;
+}
+
+@keyframes pop {
+
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
